@@ -4,7 +4,7 @@ from shorty.services.bitly import bitly_serv
 from shorty.services.tinyurl import tinyurl_serv
 
 DEFAULT_SERVICE = ["tinyurl"]
-ACCEPTED_SERVICES = ["tinyurl, bitly"]
+ACCEPTED_SERVICES = ["tinyurl", "bitly"]
 
 
 class Services:
@@ -16,8 +16,8 @@ class Services:
         self.url = data['url']
 
     def shortened_link(self):
-        if self.provider not in ACCEPTED_SERVICES:
-            raise BadServiceName(self.provider)
+        if self.provider[0] not in ACCEPTED_SERVICES:
+            raise BadServiceName(self.provider[0])
 
         if self.provider == 'tinyurl':
             shorty = tinyurl_serv.tinyurlService(self.url).tinyurl_shortener()

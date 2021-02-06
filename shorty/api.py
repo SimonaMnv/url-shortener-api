@@ -15,4 +15,4 @@ def create_shortlink():
 
     shortened_link = Services(data).shortened_link()
 
-    return jsonify(shortened_link), 200
+    return jsonify({"url": data['url'], "link": shortened_link}), 200
