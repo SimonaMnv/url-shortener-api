@@ -1,6 +1,6 @@
 import requests
 import validators
-from exceptions import (
+from shorty.services.exceptions import (
     ResponseCodeStatusException,
     BadURLException
 )
@@ -14,18 +14,17 @@ class tinyurlService:
      Raises:
          ResponseCodeStatusException: if the status code is not 200 (OK) then an exception is raised
      """
-    def tinyurl_shortener(self, url):
-        payload = {'url': url}
+    def __init__(self, url):
+        self.url = url
+
+    def tinyurl_shortener(self):
+        payload = {'url': self.url}
         response = requests.get("http://tinyurl.com/api-create.php", params=payload, timeout=5)
 
         if response.status_code != 200:
             raise ResponseCodeStatusException(response.content)
 
-        if not validators.url(url):
-            raise BadURLException(url)
+        if not validators.url(self.url):
+            raise BadURLException(self.url)
 
         return response.content.decode()
-
-
-tinyurlService = tinyurlService()
-print(tinyurlService.tinyurl_shortener("http://www.google.com/"))
