@@ -1,9 +1,4 @@
 import requests
-import validators
-from shorty.services.exceptions import (
-    ResponseCodeStatusException,
-    BadURLException
-)
 
 
 class bitlyService:
@@ -32,9 +27,6 @@ class bitlyService:
         response = requests.post('https://api-ssl.bitly.com/v4/shorten', headers=headers, json=payload)
 
         if response.status_code != 200:
-            raise ResponseCodeStatusException(response.content)
-
-        if not validators.url(self.url):
-            raise BadURLException(self.url)
+            return {"status_error": "service is unavailable right now"}
 
         return response.json()["link"]

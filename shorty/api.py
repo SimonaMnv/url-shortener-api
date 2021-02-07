@@ -1,5 +1,6 @@
-from flask import Blueprint, jsonify, request, Response
+from flask import Blueprint, jsonify, request
 from shorty.services.base import Services
+from shorty.services import error_handler
 
 api = Blueprint('api', __name__)
 
@@ -9,10 +10,17 @@ def create_shortlink():
     data = request.get_json()
 
     if not data:
-        return Response("Empty json body", status=400)
+        return error_handler.data_not_found()
     if 'url' not in data:
-        return Response("url parameter not found", status=400)
+        return error_handler.url_not_found()
 
-    shortened_link = Services(data).shortened_link()
+    to_shorten = Services(data)
 
-    return jsonify({"url": data['url'], "link": shortened_link}), 200
+    if to_shorten.wrong_url():
+        return error_handler.url_invalid_format()
+    if to_shorten.wrong_provider():
+        return error_handler.invalid_provider()
+
+    shortened_link = to_shorten.shortened_link()
+
+    return jsonify(shortened_link), 200

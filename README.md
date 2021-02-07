@@ -78,3 +78,11 @@ Disclaimer
 ----------
 
 We will not use any of this code for any of Plum's applications.
+
+Implementation steps 
+----------
+
+1. `bitly & tinyurl`: Implemented both service classes, added a base class to combine them.
+2. `POST /shortlinks`: Implemented the endpoint where the above classes are called based on user's input.
+3. `schema and provider control`: Implemented an error handler. Set up a default provider if none is chosen. Implemented fallback strategy.
+4.  

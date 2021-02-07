@@ -1,9 +1,4 @@
 import requests
-import validators
-from shorty.services.exceptions import (
-    ResponseCodeStatusException,
-    BadURLException
-)
 
 
 class tinyurlService:
@@ -22,9 +17,6 @@ class tinyurlService:
         response = requests.get("http://tinyurl.com/api-create.php", params=payload, timeout=5)
 
         if response.status_code != 200:
-            raise ResponseCodeStatusException(response.content)
-
-        if not validators.url(self.url):
-            raise BadURLException(self.url)
+            return {"status_error": "service is unavailable right now"}
 
         return response.content.decode()
