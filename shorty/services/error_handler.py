@@ -13,6 +13,12 @@ def url_not_found():
                    status_code=400), 400
 
 
+def url_provider_invalid_format():
+    return jsonify(error_message="Both provider and URL are not valid",
+                   suggested_action="valid URL example: https://google.com, valid provider examples: bitly, tinyurl",
+                   status_code=400), 400
+
+
 def url_invalid_format():
     return jsonify(error_message="URL is not valid",
                    suggested_action="valid example: https://google.com",

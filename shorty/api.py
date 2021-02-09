@@ -16,6 +16,8 @@ def create_shortlink():
 
     to_shorten = Services(data)
 
+    if to_shorten.wrong_url() and to_shorten.wrong_provider():
+        return error_handler.url_provider_invalid_format()
     if to_shorten.wrong_url():
         return error_handler.url_invalid_format()
     if to_shorten.wrong_provider():

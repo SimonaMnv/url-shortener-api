@@ -73,3 +73,9 @@ def client(app, request):
 @pytest.fixture(scope='function')
 def get(client):
     return humanize_werkzeug_client(client.get)
+
+
+# define the post fixture as well for functional testing
+@pytest.fixture(scope='function')
+def post(client):
+    return humanize_werkzeug_client(client.post)

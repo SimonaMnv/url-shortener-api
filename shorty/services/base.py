@@ -8,9 +8,7 @@ ACCEPTED_SERVICES = ["tinyurl", "bitly"]
 
 
 class Services:
-    """Args:
-        this class combines the providers bitly and tinyurl
-     """
+    """ this class combines the providers bitly and tinyurl """
     def __init__(self, data):
         self.provider = [data['provider'] if 'provider' in data else DEFAULT_SERVICE]
         self.url = data['url']
@@ -18,10 +16,12 @@ class Services:
     def wrong_url(self):
         if not validators.url(self.url):
             return True
+        return False
 
     def wrong_provider(self):
         if self.provider[0] not in ACCEPTED_SERVICES:
             return True
+        return False
 
     def shortened_link(self):
         shorty = ""
