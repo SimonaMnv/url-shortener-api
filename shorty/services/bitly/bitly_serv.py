@@ -1,7 +1,7 @@
 import requests
 
 
-class bitlyService:
+class BitlyService:
     """Args:
          url (str): the url you want to shorten
      Returns:
@@ -12,6 +12,7 @@ class bitlyService:
     def __init__(self, url, token):
         self.url = url
         self.token = token
+        self.available = True
 
     def bitly_shortener(self):
         headers = {
@@ -20,13 +21,14 @@ class bitlyService:
         }
 
         # have to get my account's group_guid
-        group_guid = requests.get("https://api-ssl.bitly.com/v4/groups", headers=headers)
+        group_guid = requests.get("https://api-ssl.bitly.com/v4/groups", headers=headers, timeout=5)
         group_guid = group_guid.json()['groups'][0]['guid']
 
         payload = {"long_url": f'{self.url}', "domain": "bit.ly", "group_guid": f'{group_guid}'}
         response = requests.post('https://api-ssl.bitly.com/v4/shorten', headers=headers, json=payload)
 
         if response.status_code != 200:
-            return {"status_error": "service is unavailable right now"}
+            self.available = False
+            return self.available
 
         return response.json()["link"]

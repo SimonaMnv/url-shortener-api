@@ -39,6 +39,15 @@ INVALID_INPUT_PROVIDER = {
     "provider": INVALID_PROVIDER
 }
 
+INVALID_JSON_PARAMS = {
+    "url": VALID_URL,
+    "wrong": VALID_PROVIDER
+}
+
+INVALID_JSON_PARAMS_ = {
+    "wrong": VALID_URL
+}
+
 
 def test_config():
     assert not create_app().testing
@@ -116,6 +125,25 @@ def test_endpoint_post_invalid_provider(post):
         "error_message": "Provider parameter is not valid",
         "status_code": 400,
         "suggested_action": "tinyurl or bitly"
+    }
+
+
+def test_endpoint_post_invalid_json_parameters(post):
+    """ test post-invalid json parameters """
+    res = post('/shortlinks', data=INVALID_JSON_PARAMS)
+    res_ = post('/shortlinks', data=INVALID_JSON_PARAMS_)
+    assert res.status_code == 400
+    assert res.get_json() == {
+        "error_message": "Wrong request parameters",
+        "status_code": 400,
+        "suggested_action": "invalid json request: please provide: url and provider or just url"
+    }
+
+    assert res_.status_code == 400
+    assert res_.get_json() == {
+        "error_message": "URL parameter not found",
+        "status_code": 400,
+        "suggested_action": "add URL parameter"
     }
 
 

@@ -1,5 +1,6 @@
 import unittest
 from shorty.services.base import Services
+from shorty.services.error_handler import CustomError
 
 VALID_INPUT_DATA = {
     "url": "https://google.com",
@@ -12,7 +13,22 @@ VALID_INPUT_DATA_ = {
 
 INVALID_INPUT_DATA = {
     "url": "htps://google.com",
+    "provider": "tinyurl"
+}
+
+INVALID_INPUT_DATA_ = {
+    "url": "https://google.com",
     "provider": "tinyur1"
+}
+
+INVALID_INPUT_DATA__ = {
+    "url": "htps://google.com",
+    "provider": "tinyur1"
+}
+
+INVALID_PARAMS = {
+    "wrong": "htps://google.com",
+    "provider": "tinyurl"
 }
 
 
@@ -20,28 +36,32 @@ class ShortyUnitTest(unittest.TestCase):
     """ testing a small piece of code or a function/method to check whether it is working fine or not """
 
     def test_url_wrong(self):
-        res = Services(INVALID_INPUT_DATA).wrong_url()
-        self.assertEqual(res, True)
+        with self.assertRaises(CustomError) as context:
+            Services(INVALID_INPUT_DATA).check_url_invalid_format()
+
+        self.assertEqual(context.exception.status_code, 400)
+        self.assertEqual(context.exception.error_message, "URL is not valid")
 
     def test_wrong_provider(self):
-        res = Services(INVALID_INPUT_DATA).wrong_provider()
-        self.assertEqual(res, True)
+        with self.assertRaises(CustomError) as context:
+            Services(INVALID_INPUT_DATA_).check_provider_invalid_format()
 
-    def test_url_valid(self):
-        res = Services(VALID_INPUT_DATA).wrong_url()
-        self.assertEqual(res, False)
+        self.assertEqual(context.exception.status_code, 400)
+        self.assertEqual(context.exception.error_message, "Provider parameter is not valid")
 
-    def test_provider_valid(self):
-        res = Services(VALID_INPUT_DATA).wrong_provider()
-        self.assertEqual(res, False)
+    def test_wrong_provider_and_url(self):
+        with self.assertRaises(CustomError) as context:
+            Services(INVALID_INPUT_DATA__).check_url_and_provider_invalid_format()
 
-    def test_long_url(self):
-        res = Services(VALID_INPUT_DATA_).wrong_url()
-        self.assertEqual(res, False)
+        self.assertEqual(context.exception.status_code, 400)
+        self.assertEqual(context.exception.error_message, "Both provider and URL are not valid")
 
-    def test_empty_provider(self):
-        res = Services(VALID_INPUT_DATA_).wrong_provider()
-        self.assertEqual(res, False)
+    def test_wrong_parameters(self):
+        with self.assertRaises(CustomError) as context:
+            Services(INVALID_PARAMS).check_url_and_provider_invalid_format()
+
+        self.assertEqual(context.exception.status_code, 400)
+        self.assertEqual(context.exception.error_message, "URL parameter not found")
 
     def test_shortened_link_valid(self):
         res = Services(VALID_INPUT_DATA).shortened_link()
