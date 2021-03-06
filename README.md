@@ -45,3 +45,15 @@ Resources
 2. `pytest`: http://pytest.org/latest/
 3. `virtualenvwrapper`: https://virtualenvwrapper.readthedocs.io/en/latest/
 4. `HTTP statuses`: https://httpstatuses.com/
+
+Implementation steps 
+----------
+
+1. `bitly & tinyurl`: Implemented tinyurl, bitly service classes, added a base class to combine them.
+2. `POST /shortlinks`: Implemented the endpoint where the above classes are called based on user's input.
+3. `error handling`: Implemented an error handler class and objects. 
+3. `schema and provider control`: Set up a default provider if none is chosen. Implemented fallback strategy.
+4. `unit testing`: Functions are tested.
+5. `functional testing`: Flask server is tested.
+6. `virtualenvwrapper`: Script added.
+=======
